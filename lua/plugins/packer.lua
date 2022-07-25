@@ -14,16 +14,30 @@ end
 vim.cmd [[
     augroup packer_user_config
         autocmd!
-        autocmd BufWritePost packer_init.lua source <afile> | PackerSync
+        autocmd BufWritePost packer.lua source <afile> | PackerSync
     augroup end
 ]]
 
-if not pcall(require, 'packer') then
+local packer_loaded, _ = pcall(require, 'packer')
+if not packer_loaded then
     return
 end
 
 return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
+    use 'folke/tokyonight.nvim'
+    use 'github/copilot.vim'
+    use {
+        'nvim-telescope/telescope.nvim',
+        requires = {{'nvim-lua/plenary.nvim'}}
+    }
+    use {
+        'phaazon/hop.nvim',
+        branch = 'v1',
+        config = function()
+            require('hop').setup()
+        end
+    }
     
     if packer_bootstrap then
         require('packer').sync()
